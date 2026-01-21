@@ -1,6 +1,6 @@
 # CRDT Text Editor
 
-A collaborative text editor implementing Conflict-free Replicated Data Types (CRDTs) for real-time synchronization across multiple clients without a central server.
+A collaborative desktop text editor implementing Conflict-Free Replicated Data Types (CRDTs) to enable real-time synchronization across multiple clients without a central server.
 
 Video Demo:
 
