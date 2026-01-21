@@ -33,7 +33,8 @@ The CRDT core is a Replicated Growable Array (RGA) implemented from scratch with
 - Java 17+ (tested on Java 21)
 - JavaFX SDK matching your Java version
  
-Download and run the app. That's it.
+Download from the release or directly from this link - https://github.com/KaifArslan/CollaborativeTextEditor/releases/download/v1.0.0/crdt-text-editor.jar 
+Run the app. That's it.
 Or type in the terminal 
 `java -jar crdt-editor.jar`
  
