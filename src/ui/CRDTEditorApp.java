@@ -20,6 +20,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Optional;
 
 
 public class CRDTEditorApp extends Application {
@@ -76,11 +77,13 @@ public class CRDTEditorApp extends Application {
         });
 
         clientBtn.setOnAction(e -> {
-            startClient();
-            serverBtn.setVisible(false);
-            clientBtn.setVisible(false);
-            disconnectBtn.setVisible(true);
-            statusLabel.setText("🟢 Connected to Server");
+            boolean connectSuccess = startClient();
+            if (connectSuccess) {
+                serverBtn.setVisible(false);
+                clientBtn.setVisible(false);
+                disconnectBtn.setVisible(true);
+                statusLabel.setText("🟢 Connected to Server");
+            }
 
         });
 
@@ -209,11 +212,17 @@ public class CRDTEditorApp extends Application {
         });
     }
 
-    private void startClient() {
+    private boolean startClient() {
         TextInputDialog dialog = new TextInputDialog("localhost");
         dialog.setContentText("Server IP:");
-        dialog.showAndWait().ifPresent(ip -> networkNode.connect(ip));
-//        networkNode.connect();
+        Optional<String> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            networkNode.connect(result.get());
+            return true;
+        } else {
+            return false; // Cancelled
+        }
     }
 
     private void startServer() {
