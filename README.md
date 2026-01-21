@@ -24,7 +24,7 @@ The CRDT core is a Replicated Growable Array (RGA) implemented from scratch with
 - Late joiner support via full-state synchronization
 - No locks or centralized edit ordering
 
-## Running the application: Three Options
+## Running the application: Two Options
 
 ### Option A — Run the JAR (if you have Java and JavaFX installed)
 
@@ -33,15 +33,11 @@ The CRDT core is a Replicated Growable Array (RGA) implemented from scratch with
 - Java 17+ (tested on Java 21)
 - JavaFX SDK matching your Java version
  
- Download and run  
+Download and run the app. That's it.
 Or type in the terminal 
 `java -jar crdt-editor.jar`
-
-### Option B — Run the Standalone Bundle (for Windows)
-
-If you downloaded the `standalone.zip`, extract it and use the provided launcher for Windows in the extracted folder
-
-### Option C: Run from Source
+ 
+### Option B: Run from Source
 
 **Requirements**
 - Java 21+
