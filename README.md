@@ -23,6 +23,10 @@ The CRDT core is a Replicated Growable Array (RGA) implemented from scratch with
 - Save document as plain text
 - Late joiner support via full-state synchronization
 - No locks or centralized edit ordering
+<p align="center"> <img width="500" height="500" alt="Screenshot 2026-01-23 190742" src="https://github.com/user-attachments/assets/15b7cfcc-50f6-4500-b041-be6344b1e2da" /></p>
+<img width="500" height="500" alt="Screenshot 2026-01-23 190830" src="https://github.com/user-attachments/assets/191cfe05-3101-4bbb-a0f8-ccc430088563" />
+<img width="500" height="500" alt="Screenshot 2026-01-23 190854" src="https://github.com/user-attachments/assets/46063a45-b229-4418-8b17-5fed59f80212" />
+
 
 ## Running the application: Two Options
 
