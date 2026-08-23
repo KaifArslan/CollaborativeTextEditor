@@ -11,60 +11,69 @@ jobs:
     name: Build Native Package
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false 
+      fail-fast: false
       matrix:
         include:
           - os: windows-latest
-            installer-type: exe
             output-name: CRDTEditor-Windows
+            app-folder: CRDTEditor
+            archive-cmd: 7z a CRDTEditor-Windows.zip CRDTEditor
           - os: ubuntu-latest
-            installer-type: app-image
             output-name: CRDTEditor-Linux
+            app-folder: CRDTEditor
+            archive-cmd: tar -czvf CRDTEditor-Linux.tar.gz CRDTEditor
           - os: macos-latest
-            installer-type: pkg 
             output-name: CRDTEditor-Mac
+            app-folder: CRDTEditor.app
+            archive-cmd: tar -czvf CRDTEditor-Mac.tar.gz CRDTEditor.app
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '21'
           distribution: 'liberica'
+          cache: 'maven'
 
+      # The classifier-per-OS profiles in pom.xml handle picking the right
+      # native JavaFX jars automatically here — nothing extra needed.
       - name: Build Fat JAR
         run: mvn clean package
 
-      - name: Package Native App (Windows & Mac)
-        if: matrix.os != 'ubuntu-latest'
+      # Isolate just the shaded jar so jpackage's --input doesn't also pick up
+      # Maven's leftover "original-*.jar" (the pre-shade jar) from target/.
+      - name: Stage jar for jpackage
+        shell: bash
         run: |
-          jpackage \
-            --type ${{ matrix.installer-type }} \
-            --name "CRDTEditor" \
-            --input target/ \
-            --main-jar crdt-text-editor-1.0.0.jar \
-            --main-class Launcher \
-            --java-options "--enable-native-access=javafx.graphics" \
-            --dest dist/
+          mkdir -p appdir
+          cp target/crdt-text-editor-1.0.0.jar appdir/
 
-      - name: Package Native App (Linux Portable Executable)
-        if: matrix.os == 'ubuntu-latest'
+      - name: Package as app-image
+        shell: bash
         run: |
+          mkdir -p dist
           jpackage \
             --type app-image \
             --name "CRDTEditor" \
-            --input target/ \
+            --input appdir \
             --main-jar crdt-text-editor-1.0.0.jar \
             --main-class Launcher \
-            --java-options "--enable-native-access=javafx.graphics" \
+            --java-options "--enable-native-access=ALL-UNNAMED" \
             --java-options "-Dglass.gtk.uiScale=1.0" \
-            --dest dist/
-          tar -czvf dist/CRDTEditor-Linux.tar.gz -C dist CRDTEditor
+            --dest dist
+
+      - name: Archive app
+        shell: bash
+        working-directory: dist
+        run: ${{ matrix.archive-cmd }}
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.output-name }}
-          path: dist/*
+          path: |
+            dist/*.zip
+            dist/*.tar.gz
