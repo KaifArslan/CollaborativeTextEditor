@@ -4,12 +4,14 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
     name: Build Native Package
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false 
       matrix:
         include:
           - os: windows-latest
@@ -19,14 +21,14 @@ jobs:
             installer-type: app-image
             output-name: CRDTEditor-Linux
           - os: macos-latest
-            installer-type: dmg
+            installer-type: pkg 
             output-name: CRDTEditor-Mac
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 21 (Liberica Full includes JavaFX & jmods)
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
