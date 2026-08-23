@@ -1,0 +1,68 @@
+name: Build Native Executables
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build Native Package
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            installer-type: exe
+            output-name: CRDTEditor-Windows
+          - os: ubuntu-latest
+            installer-type: app-image
+            output-name: CRDTEditor-Linux
+          - os: macos-latest
+            installer-type: dmg
+            output-name: CRDTEditor-Mac
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21 (Liberica Full includes JavaFX & jmods)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'liberica'
+
+      - name: Build Fat JAR
+        run: mvn clean package
+
+      - name: Package Native App (Windows & Mac)
+        if: matrix.os != 'ubuntu-latest'
+        run: |
+          jpackage \
+            --type ${{ matrix.installer-type }} \
+            --name "CRDTEditor" \
+            --input target/ \
+            --main-jar crdt-text-editor-1.0.0.jar \
+            --main-class Launcher \
+            --java-options "--enable-native-access=javafx.graphics" \
+            --dest dist/
+
+      - name: Package Native App (Linux Portable Executable)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          jpackage \
+            --type app-image \
+            --name "CRDTEditor" \
+            --input target/ \
+            --main-jar crdt-text-editor-1.0.0.jar \
+            --main-class Launcher \
+            --java-options "--enable-native-access=javafx.graphics" \
+            --java-options "-Dglass.gtk.uiScale=1.0" \
+            --dest dist/
+          tar -czvf dist/CRDTEditor-Linux.tar.gz -C dist CRDTEditor
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.output-name }}
+          path: dist/*
