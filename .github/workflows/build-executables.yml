@@ -38,11 +38,9 @@ jobs:
           distribution: 'liberica'
           cache: 'maven'
 
-    
       - name: Build Fat JAR
         run: mvn clean package
 
-     
       - name: Stage jar for jpackage
         shell: bash
         run: |
@@ -60,7 +58,6 @@ jobs:
             --main-jar crdt-text-editor-1.0.0.jar \
             --main-class Launcher \
             --java-options "--enable-native-access=ALL-UNNAMED" \
-            --java-options "-Dglass.gtk.uiScale=1.0" \
             --dest dist
 
       - name: Archive app
