@@ -6,10 +6,13 @@
     <artifactId>crdt-text-editor</artifactId>
     <version>1.0.0</version>
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <!-- JavaFX 26.x ships class files targeting Java 24+, so the compiler
+             release must be at least that high — matched here to the JDK 25
+             this project was actually built and tested against. -->
+        <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>26.0.2</javafx.version>
+        <!-- Fallback if no profile below matches (e.g. local build on an unlisted OS) -->
         <javafx.platform>linux</javafx.platform>
     </properties>
     <dependencies>
