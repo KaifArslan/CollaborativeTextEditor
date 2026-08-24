@@ -34,17 +34,15 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v5
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: 'liberica'
           cache: 'maven'
 
-      # The classifier-per-OS profiles in pom.xml handle picking the right
-      # native JavaFX jars automatically here — nothing extra needed.
+    
       - name: Build Fat JAR
         run: mvn clean package
 
-      # Isolate just the shaded jar so jpackage's --input doesn't also pick up
-      # Maven's leftover "original-*.jar" (the pre-shade jar) from target/.
+     
       - name: Stage jar for jpackage
         shell: bash
         run: |
