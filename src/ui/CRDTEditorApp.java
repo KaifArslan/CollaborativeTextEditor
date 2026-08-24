@@ -393,14 +393,17 @@ public class CRDTEditorApp extends Application {
         IndexRange sel = textArea.getSelection();
         if (sel.getLength() > 0) { deleteRange(sel.getStart(), sel.getEnd()); }
         batcher.flush();
-        String pastedText = Clipboard.getSystemClipboard().getString();
-        if (pastedText == null || pastedText.isEmpty()) return; // added guard
+        String rawClipboard = Clipboard.getSystemClipboard().getString();
+        if (rawClipboard == null || rawClipboard.isEmpty()) return;
         int caret = textArea.getCaretPosition();
-        replica.localInsert(caret, pastedText);
-        textArea.insertText(caret, pastedText);
-        textArea.positionCaret(caret + pastedText.length());
+        textArea.insertText(caret, rawClipboard);
+        int insertedLength = textArea.getCaretPosition() - caret;
+        // Extract the clean-sanitized text directly from the TextArea model
+        String cleanPastedText = textArea.getText(caret, caret + insertedLength);
+        replica.localInsert(caret, cleanPastedText);
         updateUndoRedoButtons();
     }
+
 
     private void handleUndo(){
         batcher.flush();
