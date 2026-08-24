@@ -50,9 +50,6 @@
             <classifier>${javafx.platform}</classifier>
         </dependency>
     </dependencies>
-
-    <!-- Auto-selects the right native JavaFX classifier for whichever OS Maven is running on.
-         This is what lets the same pom.xml work unmodified across the Windows/Mac/Linux CI matrix. -->
     <profiles>
         <profile>
             <id>windows</id>
@@ -69,7 +66,6 @@
                 <os><family>mac</family></os>
             </activation>
             <properties>
-                <!-- GitHub's macos-latest runners are Apple Silicon (arm64) -->
                 <javafx.platform>mac-aarch64</javafx.platform>
             </properties>
         </profile>
