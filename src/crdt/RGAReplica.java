@@ -158,25 +158,21 @@ public class RGAReplica implements Serializable {
 
     public void localDelete(int start, int end) {
         if (start >= end) return;
-
         List<NodeId> targets = new ArrayList<>();
-        int liveIndex = 0; // Tracks 0-based visible index
-
+        int liveIndex = 0;
         Deque<CharNode> stack = new ArrayDeque<>();
         CharNode headNode = nodes.get(head);
         if (headNode != null) stack.push(headNode);
 
         while (!stack.isEmpty()) {
             CharNode curr = stack.pop();
-
-            if (!curr.id.equals(head) && !curr.deleted) {
+            if (!curr.deleted) {
                 liveIndex++;
                  if (liveIndex > start && liveIndex <= end) {
                     targets.add(curr.id);
-                    if (targets.size() == (end - start)) break; // Early exit once all needed nodes are collected
+                    if (liveIndex == end) break;
                 }
             }
-
             List<CharNode> kids = children.get(curr.id);
             if (kids != null) {
                 for (int i = kids.size() - 1; i >= 0; i--) {
@@ -184,16 +180,14 @@ public class RGAReplica implements Serializable {
                 }
             }
         }
-
         if (targets.isEmpty()) return;
-
         DeleteStringOp op = new DeleteStringOp(targets);
         apply(op);
         networkNode.send(op);
         pushUndo(op);
         redoStack.clear();
     }
-
+    
     // finding node by index
     private NodeId nodeByIndex(int idx) {
         if (idx <= 0) return head;
