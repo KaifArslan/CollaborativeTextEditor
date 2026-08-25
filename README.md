@@ -4,6 +4,9 @@ A real-time collaborative text editor built around a custom Replicated Growable 
 
 [![Video Demo](https://img.youtube.com/vi/aA4ckPK4I1Y/0.jpg)](https://youtu.be/aA4ckPK4I1Y)
 
+<img width="70%" alt="Screenshot_20260825_145909" src="https://github.com/user-attachments/assets/8c014999-29c4-4919-8e8d-8b74d401ea5a" />
+<img width="50%" alt="image" src="https://github.com/user-attachments/assets/85623c10-cd17-4832-a2a5-102c9a8d0877" />
+
 ## Overview
 
 The CRDT core is an RGA using Lamport clocks for deterministic operation ordering, paired with a JavaFX desktop UI and a TCP relay server for peer synchronization and late-joiner state transfer. Multiple users edit the same document concurrently; changes merge automatically, with no locking and no centralized ordering.
@@ -12,7 +15,7 @@ The CRDT core is an RGA using Lamport clocks for deterministic operation orderin
 
 - Real-time collaborative editing with automatic conflict resolution (RGA CRDT)
 - Deterministic ordering of concurrent edits via Lamport clocks
-- Eventual Consistency
+- Eventual Consistency gaurantees
 - Operation batching — fast typing is grouped into a single string operation instead of one per keystroke
 - Undo / redo, via buttons or Ctrl+Z / Ctrl+Y
 - Range deletion via selection, and word deletion with Ctrl+Backspace
