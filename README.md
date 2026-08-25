@@ -17,7 +17,7 @@ The CRDT core is an RGA using Lamport clocks for deterministic operation orderin
 - Deterministic ordering of concurrent edits via Lamport clocks
 - Eventual Consistency gaurantees
 - Operation batching — fast typing is grouped into a single string operation instead of one per keystroke
-- Undo / redo, via buttons or Ctrl+Z / Ctrl+Y
+- Undo / redo, via buttons or Ctrl+Z / Ctrl+Y (local to your own edits) — scoped per user, Undo only your own changes without affecting other users.
 - Range deletion via selection, and word deletion with Ctrl+Backspace
 - Cut / copy / paste via keyboard (Ctrl+X/C/V) or right-click context menu
 - Peer-to-peer synchronization with late-joiner support (full-state sync)
